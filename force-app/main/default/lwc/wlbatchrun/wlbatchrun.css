@@ -1,0 +1,15 @@
+.slds-modal__container {
+    max-width: 80rem !important;
+    width: 80% !important;
+}
+
+.exampleHolder{
+    margin-left: 15px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.error{
+    width :30%;
+}
