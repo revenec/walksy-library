@@ -1,0 +1,30 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card title="PI Batches Control Panel" icon-name="standard:bot">
+        <lightning-button label="Refresh" slot="actions" onclick={handleRefresh}></lightning-button>
+        <div style="height: 300px;">
+            <lightning-datatable
+                    key-field="ApexClass"
+                    data={batches}
+                    columns={batchesColumns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={doSorting}
+                    hide-checkbox-column="true"
+                    onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </div>    
+    </lightning-card>
+
+    <c-wlbatchdetails lwc:ref='details'></c-wlbatchdetails>
+    <c-wlbatchlogs lwc:ref='logs' ></c-wlbatchlogs>
+    <c-wlbatchrun lwc:ref='run' ></c-wlbatchrun>
+    <c-wlbatchsettings lwc:ref='settings' ></c-wlbatchsettings>
+
+   
+    
+    <div class="spinnerHolder" if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+
+</template>
