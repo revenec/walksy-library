@@ -3,20 +3,12 @@ public with sharing class BatchController {
 
     @AuraEnabled
     public static List<BatchInfo> getBatchesList() {
-        Set<String> batchClasses = new Set<String>{
-            'TransactionProcessingBatch',
-            'TransactionLineProcessingBatch2',
-            'TransactionEventProcessingBatch',
-            'TasksCleanupBatch',
-            'OutreachAttributionBatch',
-            'LogProcessingBatch',
-            'ItemConnectionProcessingBatch',
-            'EventAttributionBatch'
-        };
+        
         Set<String> classNames = new Set<String>();
-        for (ApexClass aClass : [SELECT Id, Name FROM ApexClass WHERE Name IN :batchClasses]) {
-            classNames.add(aClass.Name);
-        }
+        //For this solution to work, each batch class has to implement de default constructor
+        for(Batch_Tracker__c bt : [SELECT Name FROM Batch_Tracker__c WHERE Active__c = true]) {
+            classNames.add(bt.Name);
+        }            
 
         DateTime sevenDaysAgo = System.now().addDays(-7);
 
