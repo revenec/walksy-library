@@ -16,4 +16,8 @@ public with sharing class BatchTrackerController {
         System.debug('list batches: ' + batchesList);
         return batchesList; 
     }
+    @AuraEnabled
+    public static List<Batch_Tracker__c> getBatchTrackersList(){
+        return [SELECT Id,Name,Start_Date_Field__c, End_Date_Field__c, Record_Identifier_Field__c, Active__c FROM Batch_Tracker__c LIMIT 5000];
+    }
 }

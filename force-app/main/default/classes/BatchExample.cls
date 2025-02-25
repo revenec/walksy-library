@@ -1,0 +1,19 @@
+public with sharing class BatchExample implements Database.Batchable<sObject>, Database.RaisesPlatformEvents {
+    
+     public BatchExample(){}
+     
+     public Database.QueryLocator start(Database.BatchableContext bc) {
+               
+     }
+
+    public void execute(Database.BatchableContext bc, List<sObject> scope) {
+               
+    }
+
+
+    public void finish(Database.BatchableContext bc) {
+    
+    }
+
+
+}

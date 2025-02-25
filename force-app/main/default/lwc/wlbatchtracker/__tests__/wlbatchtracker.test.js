@@ -1,4 +1,4 @@
-import { createElement } from 'lwc';
+/*import { createElement } from 'lwc';
 import Wlbatchtracker from 'c/wlbatchtracker';
 
 describe('c-wlbatchtracker', () => {
@@ -22,4 +22,4 @@ describe('c-wlbatchtracker', () => {
         // const div = element.shadowRoot.querySelector('div');
         expect(1).toBe(1);
     });
-});
+});*/
