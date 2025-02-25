@@ -10,7 +10,7 @@ trigger BatchApexErrorTrigger on BatchApexErrorEvent (after insert) {
     
     List<Batch_Log__c> errorsList = new List<Batch_Log__c>();
     for(BatchApexErrorEvent evt : Trigger.new){
-        errorsList.add(new Error_Log__c(Apex_Job_Id__c = evt.AsyncApexJobId, 
+        errorsList.add(new Batch_Log__c(Apex_Job_Id__c = evt.AsyncApexJobId, 
                                         Exception_Message__c = evt.Message, 
                                         Job_Scope__c = evt.JobScope, 
                                         Log_Type__c = evt.ExceptionType, 
