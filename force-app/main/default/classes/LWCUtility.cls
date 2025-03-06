@@ -13,7 +13,7 @@ public with sharing class LWCUtility {
 
     public static AuraHandledException throwAuraException(String message) {
         message = GeneralUtility.cleanNullValue(message);
-        AuraHandledException errorAura = new AuraHandledException(message);
+                        AuraHandledException errorAura = new AuraHandledException(message);
         errorAura.setMessage(message);
         return errorAura;
     }
