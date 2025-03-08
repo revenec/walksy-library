@@ -60,30 +60,42 @@ if [ "$scratchOrgAlias" == "" ]; then
     exit 1
 fi
 
-echo "Creating package $packageName of type $type in scratch org $scratchOrgAlias"
+echo "Creating package $packageName of type $type in scratch org $scratchOrgAlias (version $version)"
 # Retrieve all the metadata from the org 
-sf project retrieve start --source-dir force-app --target-org $originOrg
+#sf project retrieve start --source-dir force-app --target-org $originOrg
 
 # Create the scratch org where installing the package
 echo "Creating scratch org"
-sf org create scratch --definition-file config/project-scratch-def.json --alias $scratchOrgAlias  --set-default --target-dev-hub miquel@walksy.com
+#sf org create scratch -f config/project-scratch-def.json -d -y 7 -a $scratchOrgAlias -c -w 30
 
 # Create the package
-if ["$version" != ""] ; then
+if ["$version" != ""]; 
+then
     echo "Creating a version"
     sf package version create --package $packageName --code-coverage --installation-key $installKey --wait 10
+    echo "Intalling package"
+    sf package install --package $packageName --target-org $scratchOrgAlias --installation-key $installKey --wait 10 --publish-wait 10
 else
     echo "Creating the package"
     sf package create --name $packageName --path force-app --package-type $type
+    echo "Intalling package"
+    sf package install --package $packageName --target-org $scratchOrgAlias --wait 10 --publish-wait 10
 fi
-# Install package in the scratch org and run test units
-echo sf package install --package $packageName --target-org $scratchOrgAlias --installation-key $installKey --wait 10 --publish-wait 10 --json
 
+# Run test units
+if ["$version" == ""]; 
+then
+    echo "Running test units"
+    sf apex run test --synchronous
+fi
 #Create a csv file with data coverage
+echo "Get Test Rusults"
 sf data query --query 'SELECT ApexTestClass.Name, TestMethodName, ApexClassOrTrigger.Name, NumLinesUncovered, NumLinesCovered, Coverage FROM ApexCodeCoverage' -u $scratchOrgAlias -t -r csv > testcoverage.csv
 
 #upload the file to salesforce
+echo "upload test results to Salesforce"
 sf data create file --file ./testcoverage.csv
 
 #Send file using apex code
+echo "Package creation, installation, test running and email sending completed successfully"
 sf apex run --file ./sendEmailWithCoverage.apex

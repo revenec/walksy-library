@@ -6,7 +6,7 @@
     }
   ],
   "name": "Walksy Library",
-  "namespace": "WSL",
+  "namespace": "WLKS",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "62.0"
 }
