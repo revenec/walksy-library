@@ -1,0 +1,33 @@
+<template>
+    <lightning-record-edit-form
+        record-id={batchTrackerId}
+        object-api-name={batchTrackerObject}
+        onsubmit={handleSubmit}
+    >
+        <lightning-messages> </lightning-messages>
+        <lightning-combobox
+            name="batchclassname"
+            label="Batch Class Name"
+            value={batchName}
+            placeholder="Select Batch Name"
+            options={batchesInSystem}
+            onchange={handleChange} ></lightning-combobox>
+        <lightning-input-field field-name={batchStartDateField}> </lightning-input-field>
+        <lightning-input-field field-name={batchEndDateField}> </lightning-input-field>
+        <lightning-input-field field-name={batchRecordIdentifier}> </lightning-input-field>
+        <lightning-input-field field-name={batchActiveField}> </lightning-input-field>
+        <lightning-button
+            class="slds-m-top_small"
+            variant="brand"
+            type="submit"
+            name="upsert"
+            label="Save"
+        >
+        </lightning-button>
+    </lightning-record-edit-form>
+    <lightning-datatable
+                key-field="id"
+                data={batchTrackersList}
+                columns={columns}>
+        </lightning-datatable>
+</template>

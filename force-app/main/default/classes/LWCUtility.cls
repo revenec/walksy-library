@@ -1,8 +1,19 @@
 public with sharing class LWCUtility {
     
+    public class Field {
+        @AuraEnabled public String value {get;set;}
+        @AuraEnabled public String label {get;set;}
+        @AuraEnabled public String dataType {get;set;}
+
+        public Field(String value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+    }
+
     public static AuraHandledException throwAuraException(String message) {
         message = GeneralUtility.cleanNullValue(message);
-        AuraHandledException errorAura = new AuraHandledException(message);
+                        AuraHandledException errorAura = new AuraHandledException(message);
         errorAura.setMessage(message);
         return errorAura;
     }
