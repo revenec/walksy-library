@@ -1,12 +1,25 @@
 {
   "packageDirectories": [
     {
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "BatchCenter",
+      "versionDescription": "",
+      "branch": "develop",
+      "target-dev-hub": "miquel@walksy.com" 
     }
   ],
   "name": "Walksy Library",
   "namespace": "WLKS",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "62.0"
+  "sourceApiVersion": "63.0",
+  "packageAliases": {
+    "BatchCenter": "0HoWU0000000ZIj0AM",
+    "BatchCenter@0.1.0-1": "04tWU0000006ciXYAQ",
+    "BatchCenter@0.1.0-2": "04tWU0000007IjNYAU",
+    "BatchCenter@0.1.0-3": "04tWU0000007IkzYAE",
+    "BatchCenter@0.1.0-1-develop": "04tWU0000007RDBYA2"
+  }
 }

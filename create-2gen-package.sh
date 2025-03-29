@@ -1,17 +1,15 @@
 #!/bin/sh
 
 packageName=
-type=
-scratchOrgAlias=
-originOrg=
+destinationOrg=
 version=
 installKey="1234Adm1n!?"
-
+branch=
 set -e 
 
 usage()
 {
-    echo "usage: create-2gen-package [[[-pn packageName ] [-t packagetype] [-a scratchOrgalias] [-o originOrg] [-v version]]"
+    echo "usage: create-2gen-package [[-pn packageName ] [-d destinationOrg] [-v version] [-b branch]]"
 }
 
 while [ "$1" != "" ]; do
@@ -19,14 +17,11 @@ while [ "$1" != "" ]; do
         -pn | --packagename )   shift
                                 packageName=$1
                                 ;;
-        -t | --type )           shift
-                                type=$1
+        -d | --destination )    shift
+                                destinationOrg=$1
                                 ;;
-        -a | --alias )          shift
-                                scratchOrgAlias=$1
-                                ;;
-        -o | --origin )         shift
-                                originOrg=$1
+        -b | --branch )         shift
+                                branch=$1
                                 ;;
         -v | --version )        shift
                                 version=$1
@@ -40,47 +35,42 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if ["$originOrg" == "" ]; then
-	echo "There is not org defined from where to pull the metadata to package, aborting"
-	exit 1
-fi
-
-if ["$packageName" == "" ]; then
+if [ -z  "$packageName" ]; then
 	echo "Package name was not provided, aborting"
 	exit 1
 fi
 
-if ["$type" == "" ]; then
-	echo "Package type name was not provided, aborting"
-	exit 1
-fi
 
-if [ "$scratchOrgAlias" == "" ]; then
+if [ -z "$destinationOrg" ]; then
     echo "Scratch org alias was not provided, aborting"
     exit 1
 fi
 
-echo "Creating package $packageName of type $type in scratch org $scratchOrgAlias (version $version)"
-# Retrieve all the metadata from the org 
-#sf project retrieve start --source-dir force-app --target-org $originOrg
+if [ -z "$branch" ]; then
+    echo "Need to add a branch name to create the package"
+    exit 1
+fi
+
+echo "Creating package $packageName in scratch org $destinationOrg (version $version)"
 
 # Create the scratch org where installing the package
 echo "Creating scratch org"
-#sf org create scratch -f config/project-scratch-def.json -d -y 7 -a $scratchOrgAlias -c -w 30
+sf org create scratch -f config/project-scratch-def.json -d -y 7 -a $destinationOrg -c -w 30
 
 # Create the package
-if ["$version" != ""]; 
+if [ -z "$version" ]; 
 then
-    echo "Creating a version"
-    sf package version create --package $packageName --code-coverage --installation-key $installKey --wait 10
-    echo "Intalling package"
-    sf package install --package $packageName --target-org $scratchOrgAlias --installation-key $installKey --wait 10 --publish-wait 10
-else
     echo "Creating the package"
-    sf package create --name $packageName --path force-app --package-type $type
-    echo "Intalling package"
-    sf package install --package $packageName --target-org $scratchOrgAlias --wait 10 --publish-wait 10
+    sf package create --name $packageName --path force-app --package-type Unlocked
 fi
+
+# create a version (need to create a version to be able to install the package)
+echo "Creating a version"
+sf package version create --package $packageName --branch $branch --code-coverage --installation-key $installKey --wait 10
+
+# Install the package
+echo "Installing package"
+sf package install --package $version --target-org $destinationOrg --installation-key $installKey --wait 10 --publish-wait 10
 
 # Run test units
 if ["$version" == ""]; 
@@ -89,8 +79,8 @@ then
     sf apex run test --synchronous
 fi
 #Create a csv file with data coverage
-echo "Get Test Rusults"
-sf data query --query 'SELECT ApexTestClass.Name, TestMethodName, ApexClassOrTrigger.Name, NumLinesUncovered, NumLinesCovered, Coverage FROM ApexCodeCoverage' -u $scratchOrgAlias -t -r csv > testcoverage.csv
+echo "Get Test Results"
+sf data query --query 'SELECT ApexTestClass.Name, TestMethodName, ApexClassOrTrigger.Name, NumLinesUncovered, NumLinesCovered, Coverage FROM ApexCodeCoverage' -u $destinationOrg -t -r csv > testcoverage.csv
 
 #upload the file to salesforce
 echo "upload test results to Salesforce"
