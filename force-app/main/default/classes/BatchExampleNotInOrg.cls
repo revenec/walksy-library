@@ -1,6 +1,6 @@
 public with sharing class BatchExampleNotInOrg implements Database.Batchable<sObject>, Database.RaisesPlatformEvents {
     
-     public BatchExample(){}
+     public BatchExampleNotInOrg(){}
 
      public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator('SELECT Id FROM Account');   
