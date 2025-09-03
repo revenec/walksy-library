@@ -4417,3 +4417,4 @@ deploy.sh
 .sfdx/tools/252/StandardApexLibrary/ApexPages/Action.cls
 .sfdx/tools/252/apex.db
 .sfdx/indexes/lwc/custom-components.json
+.sfdx/tools/vector-db/apexClasses
