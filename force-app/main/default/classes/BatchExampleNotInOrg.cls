@@ -10,7 +10,6 @@ public with sharing class BatchExampleNotInOrg implements Database.Batchable<sOb
                
     }
 
-
     public void finish(Database.BatchableContext bc) {
     
     }

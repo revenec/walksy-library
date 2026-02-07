@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Places To Visit">
+        <lightning-map
+            map-markers={mapMarkers}
+            zoom-level={zoomLevel}
+            center={center}
+            onmarkerselect={handleMapClick}
+            options={mapOptions}
+            onclick={handleMapClick}
+            list-view="visible">
+        </lightning-map>
+        <lightning-slider label="Volume" value={zoomLevel} onchange={sliderChange}></lightning-slider>
+    </lightning-card>
+</template>
